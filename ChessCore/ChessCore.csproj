@@ -39,6 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Chessboard.cs" />
+    <Compile Include="Model\ChessConstants.cs" />
+    <Compile Include="Model\ModelBase.cs" />
+    <Compile Include="Model\PieceBase.cs" />
+    <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
