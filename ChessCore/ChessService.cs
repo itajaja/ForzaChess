@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ForzaChess.Core.Model;
+using ForzaChess.Core.Utils;
 
 namespace ForzaChess.Core
 {
@@ -8,15 +9,15 @@ namespace ForzaChess.Core
     {
         public ChessService()
         {
-            _chessboard = new Chessboard();
+            _chessboard = Chessboard.InitialChessboard;
             Turn = 0;
         }
 
-        private Chessboard _chessboard;
+        private readonly Chessboard _chessboard;
 
         public Chessboard GetChessboardCopy()
         {
-            throw new NotImplementedException();
+            return Cloner.DeepClone(_chessboard);
         }
 
         public void MovePiece(Piece piece, Position position)

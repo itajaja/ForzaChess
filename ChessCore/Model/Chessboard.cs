@@ -48,48 +48,51 @@ namespace ForzaChess.Core.Model
         /// Returns a chessboard at its initial position
         /// </summary>
         /// <returns></returns>
-        public static Chessboard InitialChessboard()
+        public static Chessboard InitialChessboard
         {
-            var board = new Chessboard();
-            board.WhitePlayer = new Player();
-            board.WhitePieces = new List<Piece>{
-                new Piece(0, 0, PieceType.Rook),
-                new Piece(0, 1, PieceType.Knight),
-                new Piece(0, 2, PieceType.Bishop),
-                new Piece(0, 3, PieceType.Queen),
-                new Piece(0, 4, PieceType.King),
-                new Piece(0, 5, PieceType.Bishop),
-                new Piece(0, 6, PieceType.Knight),
-                new Piece(0, 7, PieceType.Rook),
-                new Piece(1, 0, PieceType.Pawn),
-                new Piece(1, 1, PieceType.Pawn),
-                new Piece(1, 2, PieceType.Pawn),
-                new Piece(1, 3, PieceType.Pawn),
-                new Piece(1, 4, PieceType.Pawn),
-                new Piece(1, 5, PieceType.Pawn),
-                new Piece(1, 6, PieceType.Pawn),
-                new Piece(1, 7, PieceType.Pawn),
-            };
-            board.BlackPlayer = new Player();
-            board.WhitePieces = new List<Piece>{
-                new Piece(7, 0, PieceType.Rook),
-                new Piece(7, 1, PieceType.Knight),
-                new Piece(7, 2, PieceType.Bishop),
-                new Piece(7, 3, PieceType.Queen),
-                new Piece(7, 4, PieceType.King),
-                new Piece(7, 5, PieceType.Bishop),
-                new Piece(7, 6, PieceType.Knight),
-                new Piece(7, 7, PieceType.Rook),
-                new Piece(6, 0, PieceType.Pawn),
-                new Piece(6, 1, PieceType.Pawn),
-                new Piece(6, 2, PieceType.Pawn),
-                new Piece(6, 3, PieceType.Pawn),
-                new Piece(6, 4, PieceType.Pawn),
-                new Piece(6, 5, PieceType.Pawn),
-                new Piece(6, 6, PieceType.Pawn),
-                new Piece(6, 7, PieceType.Pawn),
-            };
-            return board;
+            get
+            {
+                var board = new Chessboard();
+                board.WhitePlayer = new Player();
+                board.WhitePieces = new List<Piece>{
+                    new Piece(0, 0, PieceType.Rook),
+                    new Piece(0, 1, PieceType.Knight),
+                    new Piece(0, 2, PieceType.Bishop),
+                    new Piece(0, 3, PieceType.Queen),
+                    new Piece(0, 4, PieceType.King),
+                    new Piece(0, 5, PieceType.Bishop),
+                    new Piece(0, 6, PieceType.Knight),
+                    new Piece(0, 7, PieceType.Rook),
+                    new Piece(1, 0, PieceType.Pawn),
+                    new Piece(1, 1, PieceType.Pawn),
+                    new Piece(1, 2, PieceType.Pawn),
+                    new Piece(1, 3, PieceType.Pawn),
+                    new Piece(1, 4, PieceType.Pawn),
+                    new Piece(1, 5, PieceType.Pawn),
+                    new Piece(1, 6, PieceType.Pawn),
+                    new Piece(1, 7, PieceType.Pawn),
+                };
+                board.BlackPlayer = new Player();
+                board.WhitePieces = new List<Piece>{
+                    new Piece(7, 0, PieceType.Rook),
+                    new Piece(7, 1, PieceType.Knight),
+                    new Piece(7, 2, PieceType.Bishop),
+                    new Piece(7, 3, PieceType.Queen),
+                    new Piece(7, 4, PieceType.King),
+                    new Piece(7, 5, PieceType.Bishop),
+                    new Piece(7, 6, PieceType.Knight),
+                    new Piece(7, 7, PieceType.Rook),
+                    new Piece(6, 0, PieceType.Pawn),
+                    new Piece(6, 1, PieceType.Pawn),
+                    new Piece(6, 2, PieceType.Pawn),
+                    new Piece(6, 3, PieceType.Pawn),
+                    new Piece(6, 4, PieceType.Pawn),
+                    new Piece(6, 5, PieceType.Pawn),
+                    new Piece(6, 6, PieceType.Pawn),
+                    new Piece(6, 7, PieceType.Pawn),
+                };
+                return board;
+            }
         }
     }
 }
