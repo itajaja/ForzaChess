@@ -124,6 +124,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ChessCore\ChessCore.csproj">
+      <Project>{0d572875-6d24-45aa-8017-a496503b1540}</Project>
+      <Name>ChessCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ForzaChess\ForzaChess.csproj">
       <Project>{E784D10F-EB6D-4109-B98F-2E45202CD932}</Project>
       <Name>ForzaChess</Name>

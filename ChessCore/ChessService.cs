@@ -5,7 +5,7 @@ using ForzaChess.Core.Utils;
 
 namespace ForzaChess.Core
 {
-    class ChessService : IChessService
+    public class ChessService : IChessService
     {
         public ChessService()
         {

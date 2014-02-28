@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using ForzaChess.Core;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ForzaChess.Tests.Core
 {
@@ -8,7 +9,10 @@ namespace ForzaChess.Tests.Core
         [TestMethod]
         public void Match()
         {
-            
+            var chess = new ChessService();
+            var board = chess.GetChessboardCopy();
+
+            chess.MovePiece();
         }
     }
 }
