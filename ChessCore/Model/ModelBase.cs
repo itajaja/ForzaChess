@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ForzaChess.Core.Model
 {
@@ -7,31 +8,24 @@ namespace ForzaChess.Core.Model
     /// </summary>
     public abstract class ModelBase
     {
-        /// <summary>
-        /// Unique identifier of the object
-        /// </summary>
-        public long Id { get; set; }
-
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
-    }
-
-    /// <summary>
-    /// Compare two models by Id
-    /// </summary>
-    public class IdComparer : IEqualityComparer<ModelBase>
-    {
-
-        public bool Equals(ModelBase x, ModelBase y)
-        {
-            return x.Id == y.Id;
-        }
-
-        public int GetHashCode(ModelBase obj)
-        {
-            return obj.Id.GetHashCode();
-        }
+//        /// <summary>
+//        /// Unique identifier of the object
+//        /// </summary>
+//        public long Id { get; set; }
+//
+//        public override int GetHashCode()
+//        {
+//            return Id.GetHashCode();
+//        }
+//
+//        public override bool Equals(object obj)
+//        {
+//            var model = obj as ModelBase;
+//            if (model == null)
+//                return false;
+//            if (Id != model.Id)
+//                return false;
+//            return model.GetType() == GetType();
+//        }
     }
 }

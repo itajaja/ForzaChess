@@ -62,5 +62,35 @@ namespace ForzaChess.Core.Model
                     throw new ArgumentOutOfRangeException("value");
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is Position && Equals((Position) obj);
+        }
+
+        public bool Equals(Position other)
+        {
+            return X == other.X && Y == other.Y;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (X * 397) ^ Y;
+            }
+        }
+
+        /// <summary>
+        /// Calculate the distance between two positions, including the diagonal paths
+        /// </summary>
+        /// <param name="p1">first position</param>
+        /// <param name="p2">second position</param>
+        /// <returns>the distance of the two positions</returns>
+        public static int Distance(Position p1, Position p2)
+        {
+            return Math.Max(Math.Abs(p1.X - p2.X), Math.Abs(p1.Y - p2.Y));
+        }
     }
 }

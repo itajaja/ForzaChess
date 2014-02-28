@@ -8,24 +8,29 @@
         /// <summary>
         /// Creates a new piece passing the initial position and the type
         /// </summary>
-        /// <param name="x">The file</param>
-        /// <param name="y">The rank</param>
         /// <param name="type">The type of piece</param>
-        public Piece(int x, int y, PieceType type)
+        /// <param name="color">The color of the piece</param>
+        public Piece(PieceType type, ChessColor color)
         {
-            Position = new Position(x, y);
             PieceType = type;
+            Color = color;
         }
-
-        /// <summary>
-        /// The current position of the piece on the field
-        /// </summary>
-        public Position Position { get; set; }
 
         /// <summary>
         /// The type of piece
         /// </summary>
         public PieceType PieceType { get; set; }
+
+        /// <summary>
+        /// The color of the piece
+        /// </summary>
+        public ChessColor Color { get; set; }
+    }
+
+    public enum ChessColor
+    {
+        White,
+        Black
     }
 
     public enum PieceType

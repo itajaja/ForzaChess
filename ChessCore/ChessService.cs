@@ -10,10 +10,17 @@ namespace ForzaChess.Core
         public ChessService()
         {
             _chessboard = Chessboard.InitialChessboard;
-            Turn = 0;
+            Turn = ChessConstants.FirstTurn;
         }
 
-        private readonly Chessboard _chessboard;
+        public ChessService(Chessboard board, int turn = ChessConstants.FirstTurn)
+        {
+            board.ValidateBoard();
+            if (Turn < ChessConstants.FirstTurn)
+                throw new ChessException("Turn number must be at least " + ChessConstants.FirstTurn);
+            _chessboard = board;
+            Turn = turn;
+        }
 
         public Chessboard GetChessboardCopy()
         {
@@ -32,14 +39,16 @@ namespace ForzaChess.Core
 
         public int Turn { get; private set; }
 
+        private readonly Chessboard _chessboard;
+
         private bool IsStaleMate()
         {
-            throw new NotImplementedException();            
+            throw new NotImplementedException();
         }
 
         private bool IsMate()
         {
-            throw new NotImplementedException();            
+            throw new NotImplementedException();
         }
     }
 }
