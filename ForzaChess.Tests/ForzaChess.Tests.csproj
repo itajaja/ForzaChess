@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\ChessboardTest.cs" />
+    <Compile Include="Core\FenTest.cs" />
     <Compile Include="Core\ChessServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />

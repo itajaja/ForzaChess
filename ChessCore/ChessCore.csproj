@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="ChessException.cs" />
     <Compile Include="ChessService.cs" />
+    <Compile Include="Fen\FenParser.cs" />
     <Compile Include="IChessService.cs" />
     <Compile Include="InvalidMoveException.cs" />
     <Compile Include="Model\Chessboard.cs" />
