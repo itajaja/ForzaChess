@@ -1,18 +1,20 @@
 ﻿using ForzaChess.Core;
+using ForzaChess.Core.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ForzaChess.Tests.Core
 {
     [TestClass]
-    class ChessServiceTest
+    public class ChessServiceTest
     {
         [TestMethod]
         public void Match()
         {
             var chess = new ChessService();
-            var board = chess.GetChessboardCopy();
-
-            chess.MovePiece();
+//            var board = chess.GetChessboardCopy();
+//            var newPos = new Position(0, 0);
+//            var oldPos = new Position(0, 3);
+//            chess.MovePiece(newPos,oldPos);
         }
     }
 }

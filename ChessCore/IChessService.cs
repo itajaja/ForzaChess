@@ -14,9 +14,9 @@ namespace ForzaChess.Core
         /// <summary>
         /// Try to move a piece. If the move is invalid returns an exception
         /// </summary>
-        /// <param name="piece">The targeted piece</param>
-        /// <param name="position">The position where to move the piece</param>
-        void MovePiece(Piece piece, Position position);
+        /// <param name="from">The position where the piece resides</param>
+        /// <param name="to">The position where to move the piece</param>
+        void MovePiece(Position from, Position to);
 
         /// <summary>
         /// Gets a list of all the available positions for the specified piece

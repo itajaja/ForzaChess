@@ -20,7 +20,7 @@ namespace ForzaChess.Core
             return Cloner.DeepClone(_chessboard);
         }
 
-        public void MovePiece(Piece piece, Position position)
+        public void MovePiece(Position from, Position to)
         {
             throw new NotImplementedException();
         }
