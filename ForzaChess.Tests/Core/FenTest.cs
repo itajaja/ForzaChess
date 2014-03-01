@@ -10,10 +10,10 @@ namespace ForzaChess.Tests.Core
     public class FenTest
     {
         [TestMethod]
-        public void GenerateBoardTest()
+        public void GenerateMatchTest()
         {
             var parser = new FenParser();
-            var chess = parser.GenerateBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); //first position
+            var chess = parser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); //first position
             var board = chess.GetChessboardCopy();
             var piece = board.PieceAt(0, 0);
             Assert.AreEqual(board.BlackPieces.Count(), 16);
@@ -82,19 +82,19 @@ namespace ForzaChess.Tests.Core
             Assert.IsTrue(board.BlackPlayer.CanCastleQueenSide);
             Assert.IsTrue(board.WhitePlayer.CanCastleKingSide);
             Assert.IsTrue(board.WhitePlayer.CanCastleQueenSide);
-            parser.GenerateBoard("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"); //after 1. e4
+            parser.GenerateMatch("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"); //after 1. e4
             Assert.AreEqual(chess.Turn, 1);
-            parser.GenerateBoard("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2"); //after 1. ... c5
+            parser.GenerateMatch("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2"); //after 1. ... c5
             Assert.AreEqual(chess.Turn, 2);
-            parser.GenerateBoard("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"); //after 2. Nf3
+            parser.GenerateMatch("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"); //after 2. Nf3
             Assert.AreEqual(chess.Turn, 2);
-            parser.GenerateBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1"); //no one can castle
-            parser.GenerateBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e4 0 1"); //en passant test
-            parser.GenerateBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); //halfmove clock test
+            parser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1"); //no one can castle
+            parser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e4 0 1"); //en passant test
+            parser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); //halfmove clock test
 
             try
             {
-                parser.GenerateBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0"); //false: missing part
+                parser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0"); //false: missing part
             }
             catch (AssertFailedException)
             {
@@ -106,7 +106,7 @@ namespace ForzaChess.Tests.Core
             }
             try
             {
-                parser.GenerateBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Kekq - 0 1"); //false: wrong castle notation
+                parser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Kekq - 0 1"); //false: wrong castle notation
             }
             catch (AssertFailedException)
             {
@@ -118,7 +118,7 @@ namespace ForzaChess.Tests.Core
             }
             try
             {
-                parser.GenerateBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR g KQkq - 0 1"); //false: wrong player's turn
+                parser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR g KQkq - 0 1"); //false: wrong player's turn
             }
             catch (AssertFailedException)
             {
@@ -130,7 +130,7 @@ namespace ForzaChess.Tests.Core
             }
             try
             {
-                parser.GenerateBoard("rnbqkbnr/ppdpppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); //false: line too long
+                parser.GenerateMatch("rnbqkbnr/ppdpppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); //false: line too long
             }
             catch (AssertFailedException)
             {
@@ -142,7 +142,7 @@ namespace ForzaChess.Tests.Core
             }
             try
             {
-                parser.GenerateBoard("rnbqkbnr/pppppipp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); //false: piece doesn't exist
+                parser.GenerateMatch("rnbqkbnr/pppppipp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); //false: piece doesn't exist
             }
             catch (AssertFailedException)
             {
@@ -154,7 +154,7 @@ namespace ForzaChess.Tests.Core
             }
             try
             {
-                parser.GenerateBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQQBNR w KQkq - 0 1"); //false: no king
+                parser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQQBNR w KQkq - 0 1"); //false: no king
             }
             catch (AssertFailedException)
             {

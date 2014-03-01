@@ -11,10 +11,6 @@ namespace ForzaChess.Core.Model
     {
         private readonly IDictionary<Position, Piece> _pieces = new Dictionary<Position, Piece>();
 
-        public Player WhitePlayer { get; set; }
-
-        public Player BlackPlayer { get; set; }
-
         public IEnumerable<Piece> BlackPieces
         {
             get {return _pieces.Values.Where(p => p.Color == ChessColor.Black); }
@@ -23,24 +19,6 @@ namespace ForzaChess.Core.Model
         public IEnumerable<Piece> WhitePieces
         {
             get { return _pieces.Values.Where(p => p.Color == ChessColor.White); }
-        }
-
-        /// <summary>
-        /// Returns the Player that has the specified color
-        /// </summary>
-        /// <param name="color">The color of the player</param>
-        /// <returns>The player with the specified color</returns>
-        public Player GetPlayer(ChessColor color)
-        {
-            switch (color)
-            {
-                case ChessColor.White:
-                    return WhitePlayer;
-                case ChessColor.Black:
-                    return BlackPlayer;
-                default:
-                    throw new ArgumentOutOfRangeException("color");
-            }
         }
 
         /// <summary>
@@ -154,6 +132,9 @@ namespace ForzaChess.Core.Model
             }
         }
 
+        /// <summary>
+        /// Validate if the pieces on the board represent a valid chessboard
+        /// </summary>
         public void ValidateBoard()
         {
             Piece whiteKing, blackKing;

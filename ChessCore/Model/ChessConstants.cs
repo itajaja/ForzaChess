@@ -10,5 +10,7 @@
         public const int ChessboardHeight = 8;
 
         public const int ChessboardWidth = 8;
+
+        public const int MaxHalfMovesBeforeStaleMate = 50;
     }
 }
