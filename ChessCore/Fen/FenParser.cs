@@ -3,9 +3,14 @@ using ForzaChess.Core.Model;
 
 namespace ForzaChess.Core.Fen
 {
-    class FenParser
+    public class FenParser
     {
-        public Chessboard GenerateBoard(string fen)
+        /// <summary>
+        /// Generate a ChessService Based on the fen string that is pased
+        /// </summary>
+        /// <param name="fen"></param>
+        /// <returns></returns>
+        public ChessService GenerateBoard(string fen)
         {
             throw new NotImplementedException();
         }
