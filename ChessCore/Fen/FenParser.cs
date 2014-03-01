@@ -34,7 +34,14 @@ namespace ForzaChess.Core.Fen
     {
       switch (playerString)
       {
-
+        case "W":
+        case "w":
+          return ChessColor.White;
+        case "B":
+        case "b":
+          return ChessColor.Black;
+        default:
+          throw new ChessException("Fen Parse: " + playerString + " doesn't represent the current player");
       }
     }
 

@@ -94,7 +94,6 @@ namespace ForzaChess.Core.Model
       get
       {
         var board = new Chessboard();
-        board.WhitePlayer = new Player();
         board.InsertPiece(0, 0, new Piece(PieceType.Rook, ChessColor.White));
         board.InsertPiece(1, 0, new Piece(PieceType.Knight, ChessColor.White));
         board.InsertPiece(2, 0, new Piece(PieceType.Bishop, ChessColor.White));
@@ -111,7 +110,6 @@ namespace ForzaChess.Core.Model
         board.InsertPiece(5, 1, new Piece(PieceType.Pawn, ChessColor.White));
         board.InsertPiece(6, 1, new Piece(PieceType.Pawn, ChessColor.White));
         board.InsertPiece(7, 1, new Piece(PieceType.Pawn, ChessColor.White));
-        board.BlackPlayer = new Player();
         board.InsertPiece(0, 7, new Piece(PieceType.Rook, ChessColor.Black));
         board.InsertPiece(1, 7, new Piece(PieceType.Knight, ChessColor.Black));
         board.InsertPiece(2, 7, new Piece(PieceType.Bishop, ChessColor.Black));
