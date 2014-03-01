@@ -81,16 +81,28 @@ namespace ForzaChess.Tests.Core
       Assert.IsTrue(chess.BlackPlayer.CanCastleQueenSide);
       Assert.IsTrue(chess.WhitePlayer.CanCastleKingSide);
       Assert.IsTrue(chess.WhitePlayer.CanCastleQueenSide);
-      FenParser.GenerateMatch("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"); //after 1. e4
+      Assert.AreEqual(chess.CurrentPlayer, ChessColor.White);
+      Assert.AreEqual(chess.HalfMovesWithoutAdvance, 0);
+      chess = FenParser.GenerateMatch("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"); //after 1. e4
+      board = chess.GetChessboardCopy();
+      Assert.AreEqual(board.PieceAt(4,3).PieceType,PieceType.Pawn);
+      Assert.AreEqual(chess.CurrentPlayer, ChessColor.Black);
       Assert.AreEqual(chess.Turn, 1);
-      FenParser.GenerateMatch("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2"); //after 1. ... c5
+      Assert.AreEqual(chess.HalfMovesWithoutAdvance, 0);
+      chess = FenParser.GenerateMatch("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2"); //after 1. ... c5
+      board = chess.GetChessboardCopy();
+      Assert.AreEqual(board.PieceAt(2, 4).PieceType, PieceType.Pawn);
+      Assert.AreEqual(chess.CurrentPlayer, ChessColor.White);
       Assert.AreEqual(chess.Turn, 2);
-      FenParser.GenerateMatch("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"); //after 2. Nf3
+      Assert.AreEqual(chess.HalfMovesWithoutAdvance, 0);
+      chess = FenParser.GenerateMatch("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"); //after 2. Nf3
       Assert.AreEqual(chess.Turn, 2);
-      FenParser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1"); //no one can castle
-      FenParser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e4 0 1"); //en passant test
-      FenParser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); //halfmove clock test
-
+      Assert.AreEqual(chess.HalfMovesWithoutAdvance, 1);
+      chess = FenParser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Kk - 0 1"); //only kingside castle
+      Assert.IsTrue(chess.BlackPlayer.CanCastleKingSide);
+      Assert.IsFalse(chess.BlackPlayer.CanCastleQueenSide);
+      Assert.IsTrue(chess.WhitePlayer.CanCastleKingSide);
+      Assert.IsFalse(chess.WhitePlayer.CanCastleQueenSide);
       try
       {
         FenParser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0"); //false: missing part

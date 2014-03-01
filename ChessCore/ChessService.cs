@@ -12,12 +12,12 @@ namespace ForzaChess.Core
     private readonly Player _blackPlayer = new Player();
     private int _turn = ChessConstants.FirstTurn;
     private int _halfMoves = 0;
-    private Position _enPassant;
+    private Position? _enPassant;
     private ChessColor _currentPlayer = ChessColor.White;
 
     public ChessService() { }
 
-    public ChessService(Chessboard board, int turn, ChessColor currentPlayer, Player white, Player black, Position enPassant, int halfMoves)
+    public ChessService(Chessboard board, int turn, ChessColor currentPlayer, Player white, Player black, Position? enPassant, int halfMoves)
     {
       board.ValidateBoard();
       if (Turn < ChessConstants.FirstTurn)
@@ -38,12 +38,12 @@ namespace ForzaChess.Core
 
     public Player WhitePlayer
     {
-      get { return Cloner.DeepClone(_whitePlayer); }
+      get { return _whitePlayer; }
     }
 
     public Player BlackPlayer
     {
-      get { return Cloner.DeepClone(_blackPlayer); }
+      get { return _blackPlayer; }
     }
 
     public Player GetPlayer(ChessColor color)
@@ -61,7 +61,7 @@ namespace ForzaChess.Core
 
     public Chessboard GetChessboardCopy()
     {
-      return Cloner.DeepClone(_chessboard);
+      return _chessboard;
     }
 
     public void MovePiece(Position from, Position to)

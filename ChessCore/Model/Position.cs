@@ -19,6 +19,20 @@ namespace ForzaChess.Core.Model
     }
 
     /// <summary>
+    /// Create a position from a string representing it (e.g.: a4, B2, c8...)
+    /// </summary>
+    /// <param name="pos">the string representing the rank and the file, case ignored</param>
+    public Position(string pos)
+      : this()
+    {
+      if (pos.Length != 2)
+        throw new ChessException("string must be 2 charachters long to be a valid position");
+      var lPos = pos.ToLower();
+      Y = lPos[0] - 'a';
+      X = lPos[1] - '1';
+    }
+
+    /// <summary>
     /// Gets the file of the position, a vertical column of the chessboard
     /// </summary>
     public string File { get { return (Y + 1).ToString(CultureInfo.InvariantCulture); } }
