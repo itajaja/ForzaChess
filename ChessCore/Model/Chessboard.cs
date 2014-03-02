@@ -9,7 +9,7 @@ namespace ForzaChess.Core.Model
   /// </summary>
   public class Chessboard : ModelBase
   {
-    private IDictionary<Position, Piece> _pieces = new Dictionary<Position, Piece>();
+    private readonly IDictionary<Position, Piece> _pieces = new Dictionary<Position, Piece>();
 
     /// <summary>
     /// Get the list of black pieces

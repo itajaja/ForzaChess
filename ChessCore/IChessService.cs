@@ -62,6 +62,6 @@ namespace ForzaChess.Core
     /// Promote the pawn at the end of the board
     /// </summary>
     /// <param name="type">The type of piece to promote to (Queen, Knight, Bishop, Rook)</param>
-    void Promote(PieceType type);
+    MoveResult Promote(PieceType type);
   }
 }

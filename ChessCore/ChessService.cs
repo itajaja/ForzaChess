@@ -12,8 +12,9 @@ namespace ForzaChess.Core
     private readonly Player _blackPlayer = new Player();
     private int _turn = ChessConstants.FirstTurn;
     private int _halfMoves = 0;
-    private Position? _enPassant;
+    private Position? _enPassant = null;
     private ChessColor _currentPlayer = ChessColor.White;
+    private Position? _waitingPromotion = null;
 
     public ChessService() { }
 
@@ -59,9 +60,31 @@ namespace ForzaChess.Core
       }
     }
 
-    public void Promote(PieceType type)
+    public MoveResult Promote(PieceType type)
     {
-      throw new NotImplementedException();
+      if (!(type == PieceType.Rook || type == PieceType.Queen
+        || type == PieceType.Knight || type == PieceType.Bishop))
+        return MoveResult.NotPossible;
+      if (_waitingPromotion == null)
+        return MoveResult.NotPossible;
+      _board.PieceAt(_waitingPromotion.Value).PieceType = type;
+      var pos = _waitingPromotion.Value;
+      _waitingPromotion = null;
+      return CalculateSituation(pos, pos, _board.PieceAt(pos));
+    }
+
+    private MoveResult CalculateSituation(Position from, Position to, Piece piece)
+    {
+      //check if check, mate, draw, or other
+      if (piece.PieceType == PieceType.Pawn
+        && (to.Y == 0 && piece.Color == ChessColor.Black || to.Y == ChessConstants.ChessboardHeight - 1 && piece.Color == ChessColor.White))
+      {
+        _waitingPromotion = to;
+        return MoveResult.Promotion;
+      }
+      _enPassant = CalculateEnPassant(from, to, CurrentPlayer);
+      NextTurn();
+      return MoveResult.Ok;
     }
 
     public Chessboard Chessboard
@@ -75,7 +98,7 @@ namespace ForzaChess.Core
       var piece = _board.PieceAt(from);
       if (piece == null)
         return MoveResult.NotPossible;
-      if (piece.Color != _currentPlayer)
+      if (!IsTurnToMove(piece))
         return MoveResult.NotInTurn;
       if (!GetAvailablePositions(from).Contains(to))
         return MoveResult.NotPossible;
@@ -83,10 +106,13 @@ namespace ForzaChess.Core
       //remove the enPassant
       if (to.Equals(_enPassant) && piece.PieceType == PieceType.Pawn)
         _board.RemovePiece(new Position(to.X, to.Y - Dir(piece.Color)));
-      //check if check, mate, draw, or other
-      _enPassant = CalculateEnPassant(from,to,CurrentPlayer);
-      NextTurn();
-      return MoveResult.Ok;
+      //check for promotion
+      return CalculateSituation(from, to, piece);
+    }
+
+    private bool IsTurnToMove(Piece piece)
+    {
+      return piece.Color == _currentPlayer && _waitingPromotion == null;
     }
 
     public ChessColor CurrentPlayer
@@ -127,10 +153,13 @@ namespace ForzaChess.Core
       if (_board.PieceAt(pos) == null)
       {
         positions.Add(pos);
-        pos.Y += advance;
-        if (_board.PieceAt(pos) == null &&
-          ((piece.Color == ChessColor.White && position.Y == 1) || (piece.Color == ChessColor.Black && position.Y == 6)))
-          positions.Add(pos);
+        if (Position.IsValid(pos.X, pos.Y + advance))
+        {
+          pos.Y += advance;
+          if (_board.PieceAt(pos) == null &&
+              ((piece.Color == ChessColor.White && position.Y == 1) || (piece.Color == ChessColor.Black && position.Y == 6)))
+            positions.Add(pos);
+        }
       }
       if (Position.IsValid(position.X + 1, position.Y + advance))
       {
@@ -164,6 +193,7 @@ namespace ForzaChess.Core
 
     private void NextTurn()
     {
+      //todo calculate halfMoves
       if (_currentPlayer == ChessColor.White)
         _currentPlayer = ChessColor.Black;
       else
@@ -173,11 +203,6 @@ namespace ForzaChess.Core
       }
     }
 
-    /// <summary>
-    /// returns the direction in whcih the pawns move
-    /// </summary>
-    /// <param name="color">the color to calculate the direction of</param>
-    /// <returns>1 for white (forward) and -1 for black (backward)</returns>
     private int Dir(ChessColor color)
     {
       return color == ChessColor.White ? 1 : -1;

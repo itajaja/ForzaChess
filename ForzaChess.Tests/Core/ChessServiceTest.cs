@@ -54,7 +54,13 @@ namespace ForzaChess.Tests.Core
     [TestMethod]
     public void Promotion()
     {
-
+      var chess = FenParser.GenerateMatch("rnbqkbn1/pppppppP/8/8/8/8/PPPPPPP1/RNBQKBNR w KQq - 0 1");
+      Assert.AreEqual(chess.MovePiece("h7", "h8"), MoveResult.Promotion);
+      Assert.AreEqual(chess.MovePiece("a2", "a3"), MoveResult.NotInTurn);
+      Assert.AreEqual(chess.MovePiece("a7", "a6"), MoveResult.NotInTurn);
+      Assert.AreEqual(chess.Promote(PieceType.King),MoveResult.NotPossible);
+      Assert.AreEqual(chess.Promote(PieceType.Knight), MoveResult.Ok);
+      Assert.AreEqual(chess.MovePiece("a7", "a6"), MoveResult.Ok);
     }
 
     [TestMethod]
