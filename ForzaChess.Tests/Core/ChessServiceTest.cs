@@ -120,7 +120,27 @@ namespace ForzaChess.Tests.Core
     [TestMethod]
     public void QueenMove()
     {
-
+      var chess = FenParser.GenerateMatch("rnbqkbnr/ppPppp1p/8/8/1P2Q1p1/8/P2PPPPP/RNB1KBNR w KQkq - 0 1");
+      var moves = chess.GetAvailablePositions("e4");
+      Assert.AreEqual(moves.Count, 17);
+      Assert.IsTrue(moves.Contains("c4"));
+      Assert.IsTrue(moves.Contains("d4"));
+      Assert.IsTrue(moves.Contains("f4"));
+      Assert.IsTrue(moves.Contains("g4"));
+      Assert.IsTrue(moves.Contains("e3"));
+      Assert.IsTrue(moves.Contains("e5"));
+      Assert.IsTrue(moves.Contains("e6"));
+      Assert.IsTrue(moves.Contains("e7"));
+      Assert.IsTrue(moves.Contains("d5"));
+      Assert.IsTrue(moves.Contains("c6"));
+      Assert.IsTrue(moves.Contains("b7"));
+      Assert.IsTrue(moves.Contains("f5"));
+      Assert.IsTrue(moves.Contains("g6"));
+      Assert.IsTrue(moves.Contains("h7"));
+      Assert.IsTrue(moves.Contains("f3"));
+      Assert.IsTrue(moves.Contains("d3"));
+      Assert.IsTrue(moves.Contains("c2"));
+      Assert.AreEqual(chess.MovePiece("e4", "c2"), MoveResult.Ok);
     }
 
     [TestMethod]

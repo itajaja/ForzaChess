@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ForzaChess.Core.Model;
 using ForzaChess.Core.Utils;
 
@@ -128,7 +129,9 @@ namespace ForzaChess.Core
         case PieceType.Pawn:
           return GetPawnPositions(position);
         case PieceType.King:
+          return GetKingPositions(position);
         case PieceType.Queen:
+          return GetQueenPositions(position);
         case PieceType.Bishop:
           return GetBishopPositions(position);
         case PieceType.Knight:
@@ -161,6 +164,22 @@ namespace ForzaChess.Core
       Expand(position, -1, -1, positions);
       Expand(position, 1, -1, positions);
       Expand(position, -1, 1, positions);
+      return positions;
+    }
+
+    private IList<Position> GetQueenPositions(Position position)
+    {
+      return GetRookPositions(position).Union(GetBishopPositions(position)).ToList();
+    }
+
+    private IList<Position> GetKingPositions(Position position)
+    {
+      var piece = _board.PieceAt(position);
+      IList<Position> positions = new List<Position>();
+      Expand(position, 1, 0, positions);
+      Expand(position, -1, 0, positions);
+      Expand(position, 0, -1, positions);
+      Expand(position, 0, 1, positions);
       return positions;
     }
 
