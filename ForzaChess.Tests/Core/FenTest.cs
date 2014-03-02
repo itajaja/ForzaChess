@@ -13,7 +13,7 @@ namespace ForzaChess.Tests.Core
     public void GenerateMatchTest()
     {
       var chess = FenParser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); //first position
-      var board = chess.GetChessboardCopy();
+      var board = chess.Chessboard;
       var piece = board.PieceAt(0, 0);
       Assert.AreEqual(board.BlackPieces.Count(), 16);
       Assert.AreEqual(board.WhitePieces.Count(), 16);
@@ -84,13 +84,13 @@ namespace ForzaChess.Tests.Core
       Assert.AreEqual(chess.CurrentPlayer, ChessColor.White);
       Assert.AreEqual(chess.HalfMovesWithoutAdvance, 0);
       chess = FenParser.GenerateMatch("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"); //after 1. e4
-      board = chess.GetChessboardCopy();
+      board = chess.Chessboard;
       Assert.AreEqual(board.PieceAt(4,3).PieceType,PieceType.Pawn);
       Assert.AreEqual(chess.CurrentPlayer, ChessColor.Black);
       Assert.AreEqual(chess.Turn, 1);
       Assert.AreEqual(chess.HalfMovesWithoutAdvance, 0);
       chess = FenParser.GenerateMatch("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2"); //after 1. ... c5
-      board = chess.GetChessboardCopy();
+      board = chess.Chessboard;
       Assert.AreEqual(board.PieceAt(2, 4).PieceType, PieceType.Pawn);
       Assert.AreEqual(chess.CurrentPlayer, ChessColor.White);
       Assert.AreEqual(chess.Turn, 2);

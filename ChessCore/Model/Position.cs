@@ -28,8 +28,8 @@ namespace ForzaChess.Core.Model
       if (pos.Length != 2)
         throw new ChessException("string must be 2 charachters long to be a valid position");
       var lPos = pos.ToLower();
-      Y = lPos[0] - 'a';
-      X = lPos[1] - '1';
+      X = lPos[0] - 'a';
+      Y = lPos[1] - '1';
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ namespace ForzaChess.Core.Model
     /// <summary>
     /// Gets the rank of the position, an horizontal line of the chessboard
     /// </summary>
-    public string Rank { get { return char.ConvertFromUtf32(X); } }
+    public string Rank { get { return ((char)(X + 'a')) + ""; } }
 
     /// <summary>
     /// Gets or sets the horizontal coordinate
@@ -106,6 +106,25 @@ namespace ForzaChess.Core.Model
     public static int Distance(Position p1, Position p2)
     {
       return Math.Max(Math.Abs(p1.X - p2.X), Math.Abs(p1.Y - p2.Y));
+    }
+
+    public static implicit operator Position(String input)
+    {
+      return new Position(input);
+    }
+
+    public static bool IsValid(int x, int y)
+    {
+      try
+      {
+        // ReSharper disable once ObjectCreationAsStatement
+        new Position(x, y);
+        return true;
+      }
+      catch (ArgumentOutOfRangeException)
+      {
+        return false;
+      }
     }
   }
 }

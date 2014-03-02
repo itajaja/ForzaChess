@@ -91,6 +91,13 @@ namespace ForzaChess.Core.Model
       RemovePiece(new Position(x, y));
     }
 
+    public void MovePiece(Position from, Position to)
+    {
+      var p = PieceAt(from);
+      RemovePiece(from);
+      InsertPiece(to, p);
+    }
+
     /// <summary>
     /// Returns a chessboard at its initial position
     /// </summary>

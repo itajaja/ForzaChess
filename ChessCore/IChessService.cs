@@ -27,9 +27,9 @@ namespace ForzaChess.Core
     /// <summary>
     /// Gets a list of all the available positions for the specified piece
     /// </summary>
-    /// <param name="piece">The targeted piece</param>
+    /// <param name="position">the position of the specified piece</param>
     /// <returns>A list of all the legal moves</returns>
-    IList<Position> GetAvailablePositions(Piece piece);
+    IList<Position> GetAvailablePositions(Position position);
 
     /// <summary>
     /// Gets the turn number
