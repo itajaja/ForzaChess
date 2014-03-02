@@ -163,7 +163,22 @@ namespace ForzaChess.Tests.Core
     [TestMethod]
     public void KingMove()
     {
-      Assert.Fail();
+      var chess = FenParser.GenerateMatch("rnbqkb1r/ppPppp1p/6n1/8/1P2Q1p1/4K3/P2PPPPP/RNB2BNR w kq - 0 1");
+      var moves = chess.GetAvailablePositions("e3");
+      Assert.AreEqual(moves.Count, 2);
+      Assert.IsTrue(moves.Contains("d3"));
+      Assert.IsTrue(moves.Contains("d4"));
+      chess = FenParser.GenerateMatch("rnbqkbnr/pppppppp/8/8/4K3/8/PPPPPPPP/RNBQ1BNR w kq - 0 1");
+      moves = chess.GetAvailablePositions("e4");
+      Assert.AreEqual(moves.Count, 8);
+      Assert.IsTrue(moves.Contains("e5"));
+      Assert.IsTrue(moves.Contains("f5"));
+      Assert.IsTrue(moves.Contains("d5"));
+      Assert.IsTrue(moves.Contains("d4"));
+      Assert.IsTrue(moves.Contains("f4"));
+      Assert.IsTrue(moves.Contains("d3"));
+      Assert.IsTrue(moves.Contains("e3"));
+      Assert.IsTrue(moves.Contains("f3"));
     }
 
     [TestMethod]

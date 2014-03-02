@@ -31,6 +31,29 @@ namespace ForzaChess.Core
     /// <returns>A list of all the legal moves</returns>
     IList<Position> GetAvailablePositions(Position position);
 
+
+    /// <summary>
+    /// Gets a list of all the controlled positions for the specified piece
+    /// </summary>
+    /// <param name="position">the position of the specified piece</param>
+    /// <returns>A list of all the controlled positions</returns>
+    IList<Position> GetControlledPositions(Position position);
+
+    /// <summary>
+    /// Determines if a given position is controlled by a given color
+    /// </summary>
+    /// <param name="position">The specified position</param>
+    /// <param name="color">The specified color</param>
+    /// <returns>true if the position is controlled, otherwise false</returns>
+    bool IsControlled(Position position, ChessColor color);
+
+    /// <summary>
+    /// Gets a list of all the controlled positions by a given color
+    /// </summary>
+    /// <param name="color">The specified color</param>
+    /// <returns>The controlled positions by the given color</returns>
+    IList<Position> GetControlledPositions(ChessColor color);
+
     /// <summary>
     /// Gets the turn number
     /// </summary>

@@ -28,6 +28,22 @@ namespace ForzaChess.Core.Model
     }
 
     /// <summary>
+    /// Get the list of black positions
+    /// </summary>
+    public IEnumerable<Position> BlackPositions
+    {
+      get { return _pieces.Keys.Where(p => _pieces[p].Color == ChessColor.Black); }
+    }
+
+    /// <summary>
+    /// Get the list of white positions
+    /// </summary>
+    public IEnumerable<Position> WhitePositions
+    {
+      get { return _pieces.Keys.Where(p => _pieces[p].Color == ChessColor.White); }
+    }
+
+    /// <summary>
     /// Returns the piece at the specified position
     /// </summary>
     /// <param name="position">The specified position</param>

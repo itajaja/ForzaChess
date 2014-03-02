@@ -124,6 +124,20 @@ namespace ForzaChess.Core
     public IList<Position> GetAvailablePositions(Position position)
     {
       var piece = Chessboard.PieceAt(position);
+      IEnumerable<Position> moves = GetControlledPositions(position);
+      if (piece.PieceType == PieceType.King)
+      {
+        var opponent = piece.Color == ChessColor.White ? ChessColor.Black : ChessColor.White;
+        moves = moves.Where(p => !IsControlled(position, opponent));
+      }
+      //TODO check if move discovers king
+      return moves.ToList();
+    }
+
+    public IList<Position> GetControlledPositions(Position position)
+    {
+      //todo pawn differs between controlled and available positions...
+      var piece = Chessboard.PieceAt(position);
       switch (piece.PieceType)
       {
         case PieceType.Pawn:
@@ -141,8 +155,6 @@ namespace ForzaChess.Core
         default:
           throw new ArgumentOutOfRangeException();
       }
-      //check if move discovers king
-      throw new NotImplementedException();
     }
 
     private IList<Position> GetRookPositions(Position position)
@@ -176,11 +188,22 @@ namespace ForzaChess.Core
     {
       var piece = _board.PieceAt(position);
       IList<Position> positions = new List<Position>();
-      Expand(position, 1, 0, positions);
-      Expand(position, -1, 0, positions);
-      Expand(position, 0, -1, positions);
-      Expand(position, 0, 1, positions);
+      for (var x = position.X - 1; x <= position.X+1; x++)
+        for (var y = position.Y - 1; y <= position.Y + 1; y++)
+          if (IsAvailable(x, y, piece.Color))
+            positions.Add(new Position(x, y));
       return positions;
+    }
+
+    public bool IsControlled(Position position, ChessColor color)
+    {
+      return GetControlledPositions(color).Contains(position);
+    }
+
+    public IList<Position> GetControlledPositions(ChessColor color)
+    {
+      var positions = color == ChessColor.White ? _board.WhitePositions : _board.BlackPositions;
+      return positions.SelectMany(GetAvailablePositions).Distinct().ToList();
     }
 
     private void Expand(Position position, int xAdv, int yAdv, ICollection<Position> positions)
