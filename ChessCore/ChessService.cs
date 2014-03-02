@@ -128,15 +128,13 @@ namespace ForzaChess.Core
         case PieceType.Pawn:
           return GetPawnPositions(position);
         case PieceType.King:
-          break;
         case PieceType.Queen:
-          break;
         case PieceType.Bishop:
-          break;
+          return GetBishopPositions(position);
         case PieceType.Knight:
-          break;
+          return GetKnightPositions(position);
         case PieceType.Rook:
-          break;
+          return GetRookPositions(position);
         default:
           throw new ArgumentOutOfRangeException();
       }
@@ -144,9 +142,89 @@ namespace ForzaChess.Core
       throw new NotImplementedException();
     }
 
+    private IList<Position> GetRookPositions(Position position)
+    {
+      var piece = _board.PieceAt(position);
+      IList<Position> positions = new List<Position>();
+      Expand(position, 1, 0, positions);
+      Expand(position, -1, 0, positions);
+      Expand(position, 0, -1, positions);
+      Expand(position, 0, 1, positions);
+      return positions;
+    }
+
+    private IList<Position> GetBishopPositions(Position position)
+    {
+      var piece = _board.PieceAt(position);
+      IList<Position> positions = new List<Position>();
+      Expand(position, 1, 1, positions);
+      Expand(position, -1, -1, positions);
+      Expand(position, 1, -1, positions);
+      Expand(position, -1, 1, positions);
+      return positions;
+    }
+
+    private void Expand(Position position, int xAdv, int yAdv, ICollection<Position> positions)
+    {
+      var piece = _board.PieceAt(position);
+      var x = position.X + xAdv;
+      var y = position.Y + yAdv;
+      while (Position.IsValid(x, y))
+      {
+        var pos = new Position(x, y);
+        var p = _board.PieceAt(pos);
+        if (p == null || p.Color != piece.Color)
+          positions.Add(pos);
+        if (p != null)
+          break;
+        x += xAdv;
+        y += yAdv;
+      }
+    }
+
+    private IList<Position> GetKnightPositions(Position position)
+    {
+      var piece = _board.PieceAt(position);
+      IList<Position> positions = new List<Position>();
+      var x = position.X - 1;
+      var y = position.Y + 2;
+      if (IsAvailable(x, y, piece.Color))
+        positions.Add(new Position(x,y));
+      x += 2;
+      if (IsAvailable(x, y, piece.Color))
+        positions.Add(new Position(x, y));
+      x += 1;
+      y -= 1;
+      if (IsAvailable(x, y, piece.Color))
+        positions.Add(new Position(x, y));
+      y -= 2;
+      if (IsAvailable(x, y, piece.Color))
+        positions.Add(new Position(x, y));
+      x -= 1;
+      y -= 1;
+      if (IsAvailable(x, y, piece.Color))
+        positions.Add(new Position(x, y));
+      x -= 2;
+      if (IsAvailable(x, y, piece.Color))
+        positions.Add(new Position(x, y));
+      x -= 1;
+      y += 1;
+      if (IsAvailable(x, y, piece.Color))
+        positions.Add(new Position(x, y));
+      y += 2;
+      if (IsAvailable(x, y, piece.Color))
+        positions.Add(new Position(x, y));
+      return positions;
+    }
+
+    private bool IsAvailable(int x, int y, ChessColor color)
+    {
+      return Position.IsValid(x,y) && (_board.PieceAt(x, y) == null || _board.PieceAt(x, y).Color != color);
+    }
+
     private IList<Position> GetPawnPositions(Position position)
     {
-      var piece = Chessboard.PieceAt(position);
+      var piece = _board.PieceAt(position);
       IList<Position> positions = new List<Position>();
       var advance = Dir(piece.Color);
       var pos = new Position(position.X, position.Y + advance);
