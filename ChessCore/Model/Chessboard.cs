@@ -9,13 +9,19 @@ namespace ForzaChess.Core.Model
   /// </summary>
   public class Chessboard : ModelBase
   {
-    private readonly IDictionary<Position, Piece> _pieces = new Dictionary<Position, Piece>();
+    private IDictionary<Position, Piece> _pieces = new Dictionary<Position, Piece>();
 
+    /// <summary>
+    /// Get the list of black pieces
+    /// </summary>
     public IEnumerable<Piece> BlackPieces
     {
       get { return _pieces.Values.Where(p => p.Color == ChessColor.Black); }
     }
 
+    /// <summary>
+    /// Get the list of white pieces
+    /// </summary>
     public IEnumerable<Piece> WhitePieces
     {
       get { return _pieces.Values.Where(p => p.Color == ChessColor.White); }
@@ -166,5 +172,6 @@ namespace ForzaChess.Core.Model
           (p.Key.Y == 0 && p.Value.PieceType == PieceType.Pawn && p.Value.Color == ChessColor.Black)))
         throw new ChessException("No pawn can be at the end of line");
     }
+
   }
 }

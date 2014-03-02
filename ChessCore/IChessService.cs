@@ -10,14 +10,14 @@ namespace ForzaChess.Core
     /// Get a copy of the current state of the match
     /// </summary>
     /// <returns>a copy of the chessboard state</returns>
-    Chessboard GetChessboardCopy();
+    Chessboard Chessboard { get; }
 
     /// <summary>
     /// Try to move a piece. If the move is invalid returns an exception
     /// </summary>
     /// <param name="from">The position where the piece resides</param>
     /// <param name="to">The position where to move the piece</param>
-    void MovePiece(Position from, Position to);
+    MoveResult MovePiece(Position from, Position to);
 
     /// <summary>
     /// Get the player that currently has to move
@@ -57,5 +57,11 @@ namespace ForzaChess.Core
     /// <param name="color">The color of the player</param>
     /// <returns>The player with the specified color</returns>
     Player GetPlayer(ChessColor color);
+
+    /// <summary>
+    /// Promote the pawn at the end of the board
+    /// </summary>
+    /// <param name="type">The type of piece to promote to (Queen, Knight, Bishop, Rook)</param>
+    void Promote(PieceType type);
   }
 }

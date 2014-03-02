@@ -59,14 +59,24 @@ namespace ForzaChess.Core
       }
     }
 
-    public Chessboard GetChessboardCopy()
-    {
-      return _chessboard;
-    }
-
-    public void MovePiece(Position from, Position to)
+    public void Promote(PieceType type)
     {
       throw new NotImplementedException();
+    }
+
+    public Chessboard Chessboard
+    {
+      get { return _chessboard; }
+    }
+
+    public MoveResult MovePiece(Position from, Position to)
+    {
+      //check and move the piece
+      //remove with enPassant?
+      //check if check, mate, draw, or other
+      _enPassant = CalculateEnPassant(from,to,CurrentPlayer);
+      NextTurn();
+      return MoveResult.Ok;
     }
 
     public ChessColor CurrentPlayer
@@ -84,6 +94,32 @@ namespace ForzaChess.Core
       get { return _turn; }
     }
 
+    private Position? CalculateEnPassant(Position from, Position to, ChessColor player)
+    {
+      if (!(_chessboard.PieceAt(to).PieceType == PieceType.Pawn && Position.Distance(from,to)==2))
+        return null;
+      var enPassant = new Position(to.X, to.Y);
+      //depending if black or white, move forward or backward
+      if (player == ChessColor.White)
+        enPassant.Y--;
+      else
+        enPassant.Y++;
+      return enPassant;
+    }
+
+    private void NextTurn()
+    {
+      if (_currentPlayer == ChessColor.White)
+      {
+        _currentPlayer = ChessColor.Black;
+      }
+      else
+      {
+        _turn++;
+        _currentPlayer = ChessColor.Black;        
+      }
+    }
+
     private bool IsDraw()
     {
       throw new NotImplementedException();
@@ -93,5 +129,14 @@ namespace ForzaChess.Core
     {
       throw new NotImplementedException();
     }
+  }
+
+  public enum MoveResult
+  {
+    Ok,
+    Check,
+    CheckMate,
+    Draw,
+    Promotion
   }
 }
