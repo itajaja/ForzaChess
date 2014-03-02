@@ -128,20 +128,21 @@ namespace ForzaChess.Core
       if (piece.PieceType == PieceType.King)
       {
         var opponent = piece.Color == ChessColor.White ? ChessColor.Black : ChessColor.White;
-        moves = moves.Where(p => !IsControlled(position, opponent));
+        moves = moves.Where(p => !IsControlled(p, opponent));
       }
+      else if (piece.PieceType == PieceType.Pawn)
+        moves = GetPawnPositions(position);
       //TODO check if move discovers king
       return moves.ToList();
     }
 
     public IList<Position> GetControlledPositions(Position position)
     {
-      //todo pawn differs between controlled and available positions...
       var piece = Chessboard.PieceAt(position);
       switch (piece.PieceType)
       {
         case PieceType.Pawn:
-          return GetPawnPositions(position);
+          return GetPawnControls(position);
         case PieceType.King:
           return GetKingPositions(position);
         case PieceType.Queen:
@@ -157,9 +158,20 @@ namespace ForzaChess.Core
       }
     }
 
-    private IList<Position> GetRookPositions(Position position)
+    private IList<Position> GetPawnControls(Position position)
     {
       var piece = _board.PieceAt(position);
+      var advance = Dir(piece.Color);
+      IList<Position> positions = new List<Position>();
+      if (Position.IsValid(position.X + 1, position.Y + advance))
+        positions.Add(new Position(position.X + 1, position.Y + advance));
+      if (Position.IsValid(position.X - 1, position.Y + advance))
+        positions.Add(new Position(position.X - 1, position.Y + advance));
+      return positions;
+    }
+
+    private IList<Position> GetRookPositions(Position position)
+    {
       IList<Position> positions = new List<Position>();
       Expand(position, 1, 0, positions);
       Expand(position, -1, 0, positions);
@@ -203,7 +215,7 @@ namespace ForzaChess.Core
     public IList<Position> GetControlledPositions(ChessColor color)
     {
       var positions = color == ChessColor.White ? _board.WhitePositions : _board.BlackPositions;
-      return positions.SelectMany(GetAvailablePositions).Distinct().ToList();
+      return positions.SelectMany(GetControlledPositions).Distinct().ToList();
     }
 
     private void Expand(Position position, int xAdv, int yAdv, ICollection<Position> positions)
