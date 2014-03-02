@@ -15,22 +15,21 @@ namespace ForzaChess.Core.Fen
     {
       try
       {
-
+        //"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" example of string
+        var fens = fen.Split(' ');
+        var board = GenerateBoard(fens[0]);
+        var currentPlayer = CurrentPlayer(fens[1]);
+        Player white, black;
+        GeneratePlayers(fens[2], out white, out black);
+        var enPassant = GenerateEnPassant(fens[3]);
+        var halfMoves = int.Parse(fens[4]);
+        var turns = int.Parse(fens[5]);
+        return new ChessService(board, turns, currentPlayer, white, black, enPassant, halfMoves);
       }
       catch (Exception e)
       {
         throw new Exception("Error while parsing the FEN string, inspect the inner exception for details", e);
       }
-      //"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" example of string
-      var fens = fen.Split(' ');
-      var board = GenerateBoard(fens[0]);
-      var currentPlayer = CurrentPlayer(fens[1]);
-      Player white, black;
-      GeneratePlayers(fens[2], out white, out black);
-      var enPassant = GenerateEnPassant(fens[3]);
-      var halfMoves = int.Parse(fens[4]);
-      var turns = int.Parse(fens[5]);
-      return new ChessService(board, turns, currentPlayer, white, black, enPassant, halfMoves);
     }
 
     private static Chessboard GenerateBoard(string boardString)
