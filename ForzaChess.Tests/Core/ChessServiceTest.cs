@@ -83,7 +83,14 @@ namespace ForzaChess.Tests.Core
     [TestMethod]
     public void KingDiscovery()
     {
-      Assert.Fail();
+      var chess = FenParser.GenerateMatch("rnb1kbnr/ppppqppp/8/8/8/8/PPPPQPPP/RNB1KB1R w KQkq - 0 1");
+      var moves = chess.GetAvailablePositions("e2");
+      Assert.AreEqual(moves.Count, 5);
+      Assert.IsTrue(moves.Contains("e3"));
+      Assert.IsTrue(moves.Contains("e4"));
+      Assert.IsTrue(moves.Contains("e5"));
+      Assert.IsTrue(moves.Contains("e6"));
+      Assert.IsTrue(moves.Contains("e7"));
     }
 
     [TestMethod]

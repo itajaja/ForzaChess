@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using ForzaChess.Core.Model;
-using ForzaChess.Core.Utils;
 
 namespace ForzaChess.Core
 {
   public class ChessService : IChessService
   {
-    private readonly Chessboard _board = Chessboard.InitialChessboard;
+    private Chessboard _board = Chessboard.InitialChessboard;
     private readonly Player _whitePlayer = new Player();
     private readonly Player _blackPlayer = new Player();
     private int _turn = ChessConstants.FirstTurn;
-    private int _halfMoves = 0;
-    private Position? _enPassant = null;
+    private int _halfMoves;
+    private Position? _enPassant;
     private ChessColor _currentPlayer = ChessColor.White;
-    private Position? _waitingPromotion = null;
+    private Position? _waitingPromotion;
 
     public ChessService() { }
 
@@ -123,16 +122,20 @@ namespace ForzaChess.Core
 
     public IList<Position> GetAvailablePositions(Position position)
     {
-      var piece = Chessboard.PieceAt(position);
+      var piece = _board.PieceAt(position);
       IEnumerable<Position> moves = GetControlledPositions(position);
-      if (piece.PieceType == PieceType.King)
-      {
-        var opponent = piece.Color == ChessColor.White ? ChessColor.Black : ChessColor.White;
-        moves = moves.Where(p => !IsControlled(p, opponent));
-      }
-      else if (piece.PieceType == PieceType.Pawn)
+      if (piece.PieceType == PieceType.Pawn)
         moves = GetPawnPositions(position);
-      //TODO check if move discovers king
+      var illegalMoves = new List<Position>();
+      foreach (var move in moves)
+      {
+        var tempBoard = new Chessboard(_board);
+        _board.MovePiece(position, move);
+        if(IsCheck(piece.Color))
+          illegalMoves.Add(move);
+        _board = tempBoard;
+      }
+      moves = moves.Except(illegalMoves);
       return moves.ToList();
     }
 
@@ -182,7 +185,6 @@ namespace ForzaChess.Core
 
     private IList<Position> GetBishopPositions(Position position)
     {
-      var piece = _board.PieceAt(position);
       IList<Position> positions = new List<Position>();
       Expand(position, 1, 1, positions);
       Expand(position, -1, -1, positions);
@@ -276,10 +278,10 @@ namespace ForzaChess.Core
       return Position.IsValid(x,y) && (_board.PieceAt(x, y) == null || _board.PieceAt(x, y).Color != color);
     }
 
-    private IList<Position> GetPawnPositions(Position position)
+    private IEnumerable<Position> GetPawnPositions(Position position)
     {
       var piece = _board.PieceAt(position);
-      IList<Position> positions = new List<Position>();
+      var positions = new List<Position>();
       var advance = Dir(piece.Color);
       var pos = new Position(position.X, position.Y + advance);
       if (_board.PieceAt(pos) == null)
@@ -345,9 +347,17 @@ namespace ForzaChess.Core
       throw new NotImplementedException();
     }
 
-    private bool IsMate()
+    private bool IsMate(ChessColor color)
     {
-      throw new NotImplementedException();
+      var kingPos = _board.LocateKing(color);
+      return IsCheck(color) && GetAvailablePositions(kingPos).Count == 0;
+    }
+
+    private bool IsCheck(ChessColor color)
+    {
+      var kingPos = _board.LocateKing(color);
+      var opponent = color == ChessColor.White ? ChessColor.Black : ChessColor.White;
+      return IsControlled(kingPos, opponent);
     }
   }
 

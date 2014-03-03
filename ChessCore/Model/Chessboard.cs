@@ -11,6 +11,14 @@ namespace ForzaChess.Core.Model
   {
     private readonly IDictionary<Position, Piece> _pieces = new Dictionary<Position, Piece>();
 
+    public Chessboard() { }
+
+    public Chessboard(Chessboard board)
+      : this()
+    {
+      _pieces = new Dictionary<Position, Piece>(board._pieces);
+    }
+
     /// <summary>
     /// Get the list of black pieces
     /// </summary>
@@ -112,6 +120,16 @@ namespace ForzaChess.Core.Model
       var p = PieceAt(from);
       RemovePiece(from);
       InsertPiece(to, p);
+    }
+
+    /// <summary>
+    /// Locates where the king is
+    /// </summary>
+    /// <param name="color">The color of the king</param>
+    /// <returns>The position of the king of the specified color</returns>
+    public Position LocateKing(ChessColor color)
+    {
+      return _pieces.First(p => p.Value.Color == color && p.Value.PieceType == PieceType.King).Key;
     }
 
     /// <summary>
