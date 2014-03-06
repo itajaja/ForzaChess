@@ -76,15 +76,43 @@ namespace ForzaChess.Core
     private MoveResult CalculateSituation(Position from, Position to, Piece piece)
     {
       //check if check, mate, draw, or other
+      var result = MoveResult.Ok;
       if (piece.PieceType == PieceType.Pawn
         && (to.Y == 0 && piece.Color == ChessColor.Black || to.Y == ChessConstants.ChessboardHeight - 1 && piece.Color == ChessColor.White))
       {
         _waitingPromotion = to;
         return MoveResult.Promotion;
       }
+      if (IsCheck(piece.Color == ChessColor.White ? ChessColor.Black : ChessColor.White))
+      {
+        result = MoveResult.Check;
+      }
       _enPassant = CalculateEnPassant(from, to, CurrentPlayer);
       NextTurn();
-      return MoveResult.Ok;
+      UpdateCastling(from);
+      return result;
+    }
+
+    private void UpdateCastling(Position from)
+    {
+      if (from.Equals(ChessConstants.WhiteKingRookPosition))
+        WhitePlayer.CanCastleKingSide = false;
+      else if (from.Equals(ChessConstants.WhiteQueenRookPosition))
+        WhitePlayer.CanCastleQueenSide = false;
+      else if (from.Equals(ChessConstants.WhiteKingPosition))
+      {
+        WhitePlayer.CanCastleQueenSide = false;
+        WhitePlayer.CanCastleKingSide = false;        
+      }
+      else if (from.Equals(ChessConstants.BlackKingRookPosition))
+        BlackPlayer.CanCastleKingSide = false;
+      else if (from.Equals(ChessConstants.BlackQueenRookPosition))
+        BlackPlayer.CanCastleKingSide = false;
+      else if (from.Equals(ChessConstants.BlackKingPosition))
+      {
+        BlackPlayer.CanCastleKingSide = false;
+        BlackPlayer.CanCastleQueenSide = false;
+      }
     }
 
     public Chessboard Chessboard
@@ -103,10 +131,9 @@ namespace ForzaChess.Core
       if (!GetAvailablePositions(from).Contains(to))
         return MoveResult.NotPossible;
       _board.MovePiece(from, to);
-      //remove the enPassant
       if (to.Equals(_enPassant) && piece.PieceType == PieceType.Pawn)
         _board.RemovePiece(new Position(to.X, to.Y - Dir(piece.Color)));
-      //check for promotion
+      
       return CalculateSituation(from, to, piece);
     }
 

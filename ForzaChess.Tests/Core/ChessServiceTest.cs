@@ -65,7 +65,12 @@ namespace ForzaChess.Tests.Core
     [TestMethod]
     public void Check()
     {
-      Assert.Fail();
+      var chess = FenParser.GenerateMatch("rnbqkb1r/pppppppp/6B1/2n5/8/8/PPPPPPPP/R3K2R b KQkq - 0 1");
+      Assert.AreEqual(chess.MovePiece("c5","d3"),MoveResult.Check);
+      chess = FenParser.GenerateMatch("rnb1kb1r/ppppqppp/6B1/8/4n3/8/PPPP1PPP/R3K2R b KQkq - 0 1");
+      Assert.AreEqual(chess.MovePiece("e4", "d6"), MoveResult.Check);
+      Assert.AreEqual(chess.MovePiece("e1", "e2"), MoveResult.NotPossible);
+      Assert.AreEqual(chess.MovePiece("e1", "d1"), MoveResult.Ok);
     }
 
     [TestMethod]
@@ -198,6 +203,11 @@ namespace ForzaChess.Tests.Core
       Assert.IsTrue(moves.Contains("d1"));
       Assert.IsTrue(moves.Contains("f1"));
       Assert.IsTrue(moves.Contains("g1"));
+      chess.MovePiece("e1", "f1");
+      Assert.IsFalse(chess.WhitePlayer.CanCastleKingSide);
+      Assert.IsFalse(chess.WhitePlayer.CanCastleQueenSide);
+      Assert.IsTrue(chess.BlackPlayer.CanCastleKingSide);
+      Assert.IsTrue(chess.BlackPlayer.CanCastleQueenSide);
       chess = FenParser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R3KB1R w Kkq - 0 1");
       moves = chess.GetAvailablePositions("e1");
       Assert.AreEqual(moves.Count, 1);
