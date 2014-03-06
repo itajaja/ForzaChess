@@ -191,7 +191,24 @@ namespace ForzaChess.Tests.Core
     [TestMethod]
     public void Castling()
     {
-      Assert.Fail();
+      var chess = FenParser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1");
+      var moves = chess.GetAvailablePositions("e1");
+      Assert.AreEqual(moves.Count, 4);
+      Assert.IsTrue(moves.Contains("c1"));
+      Assert.IsTrue(moves.Contains("d1"));
+      Assert.IsTrue(moves.Contains("f1"));
+      Assert.IsTrue(moves.Contains("g1"));
+      chess = FenParser.GenerateMatch("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R3KB1R w Kkq - 0 1");
+      moves = chess.GetAvailablePositions("e1");
+      Assert.AreEqual(moves.Count, 1);
+      Assert.IsTrue(moves.Contains("d1"));
+      chess = FenParser.GenerateMatch("rnbqkb1r/pppppppp/8/8/8/3n4/PPPPPPPP/R3KB1R w KQkq - 0 1");
+      moves = chess.GetAvailablePositions("e1");
+      Assert.AreEqual(moves.Count, 1);
+      Assert.IsTrue(moves.Contains("d1"));
+      chess = FenParser.GenerateMatch("rnbqkb1r/pppppppp/6B1/8/8/4n3/PPPPPPPP/R3K2R w KQkq - 0 1");
+      moves = chess.GetAvailablePositions("e1");
+      Assert.AreEqual(moves.Count, 0);
     }
   }
 }

@@ -126,6 +126,8 @@ namespace ForzaChess.Core
       IEnumerable<Position> moves = GetControlledPositions(position);
       if (piece.PieceType == PieceType.Pawn)
         moves = GetPawnPositions(position);
+      if (piece.PieceType == PieceType.King)
+        moves = moves.Union(GetCastlingPositions(position));
       var illegalMoves = new List<Position>();
       foreach (var move in moves)
       {
@@ -138,6 +140,41 @@ namespace ForzaChess.Core
       moves = moves.Except(illegalMoves);
       return moves.ToList();
     }
+
+    private IEnumerable<Position> GetCastlingPositions(Position position)
+    {
+      var piece = _board.PieceAt(position);
+      var player = GetPlayer(piece.Color);
+      IList<Position> moves = new List<Position>();
+      if (IsCheck(piece.Color))
+        return moves;
+      var y = piece.Color == ChessColor.White ? 0 : 7;
+      int x, mid;
+      var opponent = piece.Color == ChessColor.White ? ChessColor.Black : ChessColor.White;
+      if (player.CanCastleKingSide)
+      {
+        x = 6;
+        mid = 5;
+        var finalPos = new Position(x, y);
+        var midPos = new Position(mid, y);
+        if (_board.PieceAt(midPos) == null && !IsControlled(midPos,opponent) &&
+          _board.PieceAt(finalPos) == null && !IsControlled(finalPos,opponent))
+          moves.Add(finalPos);
+      }
+      if (player.CanCastleQueenSide)
+      {
+        x = 2;
+        mid = 3;
+        var finalPos = new Position(x, y);
+        var midPos = new Position(mid, y);
+        if (_board.PieceAt(midPos) == null && !IsControlled(midPos, opponent) &&
+          _board.PieceAt(finalPos) == null && !IsControlled(finalPos, opponent))
+          moves.Add(finalPos);
+      }
+      return moves;
+    }
+
+    
 
     public IList<Position> GetControlledPositions(Position position)
     {
