@@ -16,6 +16,10 @@ namespace ForzaChess.Core
     private ChessColor _currentPlayer = ChessColor.White;
     private Position? _waitingPromotion;
 
+    private Position? _blackThreeFold;
+    private Position? _whiteThreeFold;
+    private int ThreefoldCounter;
+
     public ChessService() { }
 
     public ChessService(Chessboard board, int turn, ChessColor currentPlayer, Player white, Player black, Position? enPassant, int halfMoves)
@@ -83,6 +87,12 @@ namespace ForzaChess.Core
         _waitingPromotion = to;
         return MoveResult.Promotion;
       }
+      var pos = piece.Color == ChessColor.White ? _board.BlackPositions : _board.WhitePositions;
+      if (pos.All(p => GetAvailablePositions(p).Count == 0))
+        return MoveResult.Draw; //stalemate
+      UpdateThreefold(to,piece);
+      if (ThreefoldCounter == 3)
+        return MoveResult.Draw;
       if (IsCheck(piece.Color == ChessColor.White ? ChessColor.Black : ChessColor.White))
       {
         result = MoveResult.Check;
@@ -91,6 +101,17 @@ namespace ForzaChess.Core
       NextTurn();
       UpdateCastling(from);
       return result;
+    }
+
+    private void UpdateThreefold(Position position, Piece piece)
+    {
+      var previous = piece.Color == ChessColor.White ? _whiteThreeFold : _blackThreeFold;
+      if (position.Equals(previous))
+        ThreefoldCounter++;
+      else if (piece.Color == ChessColor.White)
+        _whiteThreeFold = position;
+      else
+        _blackThreeFold = position;
     }
 
     private void UpdateCastling(Position from)
@@ -122,7 +143,6 @@ namespace ForzaChess.Core
 
     public MoveResult MovePiece(Position from, Position to)
     {
-      //check and move the piece
       var piece = _board.PieceAt(from);
       if (piece == null)
         return MoveResult.NotPossible;
@@ -133,7 +153,6 @@ namespace ForzaChess.Core
       _board.MovePiece(from, to);
       if (to.Equals(_enPassant) && piece.PieceType == PieceType.Pawn)
         _board.RemovePiece(new Position(to.X, to.Y - Dir(piece.Color)));
-      
       return CalculateSituation(from, to, piece);
     }
 
