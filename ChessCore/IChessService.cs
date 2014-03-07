@@ -86,5 +86,16 @@ namespace ForzaChess.Core
     /// </summary>
     /// <param name="type">The type of piece to promote to (Queen, Knight, Bishop, Rook)</param>
     MoveResult Promote(PieceType type);
+
+    /// <summary>
+    /// Returns true if a draw can be claimed for the fifty moves rule, otherwise false
+    /// </summary>
+    bool IsFiftyMoveRule { get; }
+
+
+    /// <summary>
+    /// Returns true if a draw can be claimed for the three-fold repetition rule, otherwise false
+    /// </summary>
+    bool IsThreeFoldRepetition { get; }
   }
 }

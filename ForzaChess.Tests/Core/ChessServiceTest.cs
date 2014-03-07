@@ -82,7 +82,10 @@ namespace ForzaChess.Tests.Core
     [TestMethod]
     public void Draw()
     {
-      Assert.Fail();
+      var chess = FenParser.GenerateMatch("rnbqkb1r/ppppppp1/5n2/7p/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq h6 49 3");
+      Assert.AreEqual(chess.MovePiece("e1", "e2"), MoveResult.Draw);
+      chess = FenParser.GenerateMatch("rnbqkb1r/ppppppp1/5n2/7p/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq h6 49 3");
+      Assert.AreEqual(chess.MovePiece("a2", "a3"), MoveResult.Ok);
     }
 
     [TestMethod]

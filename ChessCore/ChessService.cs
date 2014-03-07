@@ -18,7 +18,7 @@ namespace ForzaChess.Core
 
     private Position? _blackThreeFold;
     private Position? _whiteThreeFold;
-    private int ThreefoldCounter;
+    private int _threefoldCounter;
 
     public ChessService() { }
 
@@ -77,7 +77,29 @@ namespace ForzaChess.Core
       return CalculateSituation(pos, pos, _board.PieceAt(pos));
     }
 
-    private MoveResult CalculateSituation(Position from, Position to, Piece piece)
+
+    public MoveResult MovePiece(Position from, Position to)
+    {
+      var capture = false;
+      var piece = _board.PieceAt(from);
+      if (piece == null)
+        return MoveResult.NotPossible;
+      if (!IsTurnToMove(piece))
+        return MoveResult.NotInTurn;
+      if (!GetAvailablePositions(from).Contains(to))
+        return MoveResult.NotPossible;
+      if (_board.PieceAt(to) != null)
+        capture = true;
+      _board.MovePiece(from, to);
+      if (to.Equals(_enPassant) && piece.PieceType == PieceType.Pawn) //remove with EnPassant
+      {
+        _board.RemovePiece(new Position(to.X, to.Y - Dir(piece.Color)));
+        capture = true;
+      }
+      return CalculateSituation(from, to, piece, capture);
+    }
+
+    private MoveResult CalculateSituation(Position from, Position to, Piece piece, bool capture = false)
     {
       //check if check, mate, draw, or other
       var result = MoveResult.Ok;
@@ -90,9 +112,8 @@ namespace ForzaChess.Core
       var pos = piece.Color == ChessColor.White ? _board.BlackPositions : _board.WhitePositions;
       if (pos.All(p => GetAvailablePositions(p).Count == 0))
         return MoveResult.Draw; //stalemate
-      UpdateThreefold(to,piece);
-      if (ThreefoldCounter == 3)
-        return MoveResult.Draw;
+      if (IsCheckMateImpossible)
+        return MoveResult.Draw; //impossibility of checkmate
       if (IsCheck(piece.Color == ChessColor.White ? ChessColor.Black : ChessColor.White))
       {
         result = MoveResult.Check;
@@ -100,14 +121,50 @@ namespace ForzaChess.Core
       _enPassant = CalculateEnPassant(from, to, CurrentPlayer);
       NextTurn();
       UpdateCastling(from);
+      UpdateThreefold(to, piece);
+      UpdateFiftyMoves(piece, capture);
+      
       return result;
+    }
+
+    public bool IsCheckMateImpossible
+    {
+      get
+      {
+        var p1 = _board.BlackPieces.Select(p => p.PieceType).ToList();
+        var p2 = _board.WhitePieces.Select(p => p.PieceType).ToList();
+        if (p1.Count == 1 && p2.Count == 1)
+          return true;
+        if (p1.Count == 2 && (p1.Contains(PieceType.Bishop) || p1.Contains(PieceType.Knight)) && p1.Count == 1)
+          return true;
+        //I know, I skipped this rule: king and bishop versus king and bishop with the bishops on the same colour. One day I will Implement it
+        return false;
+      }
+    }
+
+    private void UpdateFiftyMoves(Piece piece, bool capture)
+    {
+      if (piece.PieceType == PieceType.Pawn || capture)
+        _halfMoves = 0;
+      else
+        _halfMoves++;
+    }
+
+    public bool IsFiftyMoveRule
+    {
+      get { return _halfMoves >= 50; }
+    }
+
+    public bool IsThreeFoldRepetition
+    {
+      get { return _threefoldCounter >= 6; }
     }
 
     private void UpdateThreefold(Position position, Piece piece)
     {
       var previous = piece.Color == ChessColor.White ? _whiteThreeFold : _blackThreeFold;
       if (position.Equals(previous))
-        ThreefoldCounter++;
+        _threefoldCounter++;
       else if (piece.Color == ChessColor.White)
         _whiteThreeFold = position;
       else
@@ -139,21 +196,6 @@ namespace ForzaChess.Core
     public Chessboard Chessboard
     {
       get { return _board; }
-    }
-
-    public MoveResult MovePiece(Position from, Position to)
-    {
-      var piece = _board.PieceAt(from);
-      if (piece == null)
-        return MoveResult.NotPossible;
-      if (!IsTurnToMove(piece))
-        return MoveResult.NotInTurn;
-      if (!GetAvailablePositions(from).Contains(to))
-        return MoveResult.NotPossible;
-      _board.MovePiece(from, to);
-      if (to.Equals(_enPassant) && piece.PieceType == PieceType.Pawn)
-        _board.RemovePiece(new Position(to.X, to.Y - Dir(piece.Color)));
-      return CalculateSituation(from, to, piece);
     }
 
     private bool IsTurnToMove(Piece piece)
